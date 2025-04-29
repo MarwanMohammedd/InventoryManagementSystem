@@ -1,3 +1,3 @@
 namespace InventoryManagmentSystem.Shared.Utilities;
 
-public enum TransactionType {}
+public enum TransactionType { Add, Remove, Transfer }

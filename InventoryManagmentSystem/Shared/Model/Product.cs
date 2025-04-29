@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace InventoryManagmentSystem.Shared.Model;
 
 public class Product
@@ -8,4 +10,8 @@ public class Product
     public int Quantity { get; set; }
     public decimal Price { get; set; }
     public int LowStockThreshold { get; set; }
+    
+    [ForeignKey("Category")]
+    public int CategoryID { get; set; }
+    public Category? Category { get; set; }
 }

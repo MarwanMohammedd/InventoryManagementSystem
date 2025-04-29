@@ -1,6 +1,7 @@
 using System.Reflection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using InventoryManagmentSystem.Features.ProductManagement.AddProduct;
 using InventoryManagmentSystem.Shared.Data;
 using InventoryManagmentSystem.Shared.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +31,7 @@ builder.Services.AddCors(option =>
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
-
+builder.Services.AddScoped<ITransactionRecord, TransactionRecord>();
 
 builder.Services.AddMediatR(config =>
 {

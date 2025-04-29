@@ -9,10 +9,13 @@ public class UnitOfWork : IUnitOfWork
 
     public IProductRepository Product { get; private set; }
 
+    public ITransactionRepository Transaction { get; private set; }
+
     public UnitOfWork(ApplecationDBContext applicationDBContext)
     {
         this.applicationDBContext = applicationDBContext;
         Product = new ProductRepository(this.applicationDBContext);
+        Transaction = new TransactionRepository(this.applicationDBContext);
     }
 
     public async Task CommitAsync()
