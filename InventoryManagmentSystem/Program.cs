@@ -1,7 +1,8 @@
 using System.Reflection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using InventoryManagmentSystem.Features.ProductManagement.AddProduct;
+using Hangfire;
+using InventoryManagmentSystem.Features.TransactionRecorded;
 using InventoryManagmentSystem.Shared.Data;
 using InventoryManagmentSystem.Shared.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -13,8 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+
+
 // builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+
 builder.Services.AddDbContext<ApplecationDBContext>(
     option =>
     {
@@ -38,7 +43,20 @@ builder.Services.AddMediatR(config =>
     config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
 });
 
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IArchivedTransaction, ArchivedTransaction>();
+
+
+builder.Services.AddHangfire(configuration => configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnetionString")));
+
+// Add the processing server as IHostedService
+builder.Services.AddHangfireServer();
+
 
 var app = builder.Build();
 
@@ -50,6 +68,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseHangfireDashboard();
+
+RecurringJob.AddOrUpdate<IArchivedTransaction>("ArchiveJob" , (archive)=> archive.Archive() , Cron.Yearly);
+RecurringJob.AddOrUpdate<IArchivedTransaction>("ArchiveJob" , (archive)=> archive.Archive() , Cron.Yearly);
 
 app.MapControllers();
 

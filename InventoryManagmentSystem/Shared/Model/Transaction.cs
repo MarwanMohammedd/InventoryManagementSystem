@@ -8,4 +8,6 @@ public class Transaction
     public string TransactionType { get; set; } = null!;
     public DateTime Date { get; set; }
     public int Quantity { get; set; }
+    public bool IsArchived { get; set; } = false;
+
 }

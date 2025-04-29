@@ -55,6 +55,18 @@
               "target": "Package",
               "version": "[11.3.0, )"
             },
+            "Hangfire": {
+              "target": "Package",
+              "version": "[1.8.18, )"
+            },
+            "Hangfire.Core": {
+              "target": "Package",
+              "version": "[1.8.18, )"
+            },
+            "Hangfire.SqlServer": {
+              "target": "Package",
+              "version": "[1.8.18, )"
+            },
             "MediatR": {
               "target": "Package",
               "version": "[12.5.0, )"
@@ -62,6 +74,10 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.15, )"
+            },
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[6.0.2, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

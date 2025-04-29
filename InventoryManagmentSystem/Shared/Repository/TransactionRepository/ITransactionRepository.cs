@@ -5,5 +5,5 @@ namespace InventoryManagmentSystem.Shared.Repository.ProductRepository;
 
 public interface ITransactionRepository : IGenericRepository<Transaction>
 {
-
+    void BulkTransactionArchivedUpdate();
 }
