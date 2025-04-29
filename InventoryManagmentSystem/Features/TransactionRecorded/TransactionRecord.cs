@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using InventoryManagmentSystem.Shared.Model;
 using InventoryManagmentSystem.Shared.UnitOfWork;
 
-namespace InventoryManagmentSystem.Features.ProductManagement.AddProduct;
+namespace InventoryManagmentSystem.Features.TransactionRecorded;
 
 public class TransactionRecord : ITransactionRecord
 {
@@ -12,10 +12,10 @@ public class TransactionRecord : ITransactionRecord
     {
         this.unitOfWork = unitOfWork;
     }
-    public async Task Record(string UserName, int Quantity,  string TransactionType)
+    public async Task Record(string ProductName , string UserName, int Quantity,  string TransactionType)
     {
         var transaction = new Transaction() 
-        { UserName = UserName, Date = DateTime.UtcNow, TransactionType = TransactionType, Quantity = Quantity };
+        {ProductName = ProductName , UserName = UserName, Date = DateTime.UtcNow, TransactionType = TransactionType, Quantity = Quantity };
        await unitOfWork.Transaction.AddAsync(transaction);
        await unitOfWork.SaveAsync();
     }
