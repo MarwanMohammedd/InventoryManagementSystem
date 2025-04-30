@@ -1,7 +1,7 @@
 using InventoryManagmentSystem.Shared.Data;
 using InventoryManagmentSystem.Shared.Model;
 
-namespace InventoryManagmentSystem.Shared.Repository.ProductRepository;
+namespace InventoryManagmentSystem.Shared.Repository.TransactionRepository;
 public class TransactionRepository : GenericRepository<Transaction>, ITransactionRepository
 {
     private readonly ApplecationDBContext applicationDBContext;

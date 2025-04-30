@@ -1,6 +1,8 @@
 using InventoryManagmentSystem.Shared.APIResult;
+using InventoryManagmentSystem.Shared.Model;
 using InventoryManagmentSystem.Shared.UnitOfWork;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagmentSystem.Features.ProductManagement.RemoveProduct;
 
@@ -14,7 +16,7 @@ public class RemoveProductHandler : IRequestHandler<RemoveProductRequest, Result
     }
     public async Task<Result<bool>> Handle(RemoveProductRequest request, CancellationToken cancellationToken)
     {
-        bool result = await unitOfWork.Product.Delete(element => element.ProductId == request.ProductId);
+        bool result = await unitOfWork.Product.Delete(element => element.Id == request.ProductId);
         if (result)
         {
             await unitOfWork.SaveAsync();

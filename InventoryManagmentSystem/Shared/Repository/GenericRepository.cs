@@ -51,14 +51,20 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     /// <param name="expression">Lambda Expression</param>
     /// <param name="Selector">Name Of Navigation Property</param>
     /// <returns>Task<TEntity?></returns>
-    public async Task<TEntity?> GetItemAsync(Expression<Func<TEntity, bool>> expression, string? Selector = null)
+    public async Task<TEntity?> GetItemAsync(
+     Expression<Func<TEntity, bool>> predicate,
+     Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null)
     {
-        if (Selector is not null)
+        IQueryable<TEntity> query = _applicationDBContext.Set<TEntity>();
+
+        if (include != null)
         {
-            return await _applicationDBContext.Set<TEntity>().Include(Selector).FirstOrDefaultAsync(expression);
+            query = include(query);
         }
-        return await _applicationDBContext.Set<TEntity>().FirstOrDefaultAsync(expression);
+
+        return await query.FirstOrDefaultAsync(predicate);
     }
+
     /// <summary>
     ///  Return a Read Only List of Entity
     ///  AsNoTracking List
@@ -66,14 +72,18 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     /// <param name="Selector">Name Of Navigation Property</param>
     /// <returns>Task<IEnumerable<TEntity>></returns>
     /// 
-    public async Task<IEnumerable<TEntity>> ReadAllAsync(string? Selector = null)
+    public async Task<IEnumerable<TEntity>> ReadAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null)
     {
-        if (Selector is not null)
+        IQueryable<TEntity> query = _applicationDBContext.Set<TEntity>();
+
+        if (include != null)
         {
-            return await _applicationDBContext.Set<TEntity>().Include(Selector).AsNoTracking().ToListAsync();
+            query = include(query);
         }
-        return await _applicationDBContext.Set<TEntity>().AsNoTracking().ToListAsync();
+
+        return await query.AsNoTracking().ToListAsync();
     }
+    
     public async Task<bool> UpdateAsync(Expression<Func<TEntity, bool>> Predicate, TEntity entity)
     {
         TEntity? existedItem = await _applicationDBContext.Set<TEntity>().FirstOrDefaultAsync(Predicate);

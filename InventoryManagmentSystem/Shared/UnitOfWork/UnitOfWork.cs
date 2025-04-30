@@ -1,5 +1,8 @@
 using InventoryManagmentSystem.Shared.Data;
+using InventoryManagmentSystem.Shared.Repository.InventoryRepository;
 using InventoryManagmentSystem.Shared.Repository.ProductRepository;
+using InventoryManagmentSystem.Shared.Repository.TransactionRepository;
+using InventoryManagmentSystem.Shared.Repository.WarehouseRepository;
 
 namespace InventoryManagmentSystem.Shared.UnitOfWork;
 
@@ -11,11 +14,17 @@ public class UnitOfWork : IUnitOfWork
 
     public ITransactionRepository Transaction { get; private set; }
 
+    public IInventoryRepository Inventory { get; private set; }
+
+    public IWarehouseRepository Warehouse { get; private set; }
+
     public UnitOfWork(ApplecationDBContext applicationDBContext)
     {
         this.applicationDBContext = applicationDBContext;
         Product = new ProductRepository(this.applicationDBContext);
         Transaction = new TransactionRepository(this.applicationDBContext);
+        Inventory = new InventoryRepository(this.applicationDBContext);
+        Warehouse = new WarehouseRepository(this.applicationDBContext);
     }
 
     public async Task CommitAsync()

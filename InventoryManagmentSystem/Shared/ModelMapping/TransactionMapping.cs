@@ -9,5 +9,6 @@ public class TransactionMapping : IEntityTypeConfiguration<Transaction>
     public void Configure(EntityTypeBuilder<Transaction> builder)
     {
         builder.HasQueryFilter(transaction => transaction.IsArchived == false);
+        builder.Property(property => property.Type).HasConversion<int>();
     }
 }

@@ -1,6 +1,6 @@
-namespace InventoryManagmentSystem.Features.TransactionRecorded;
+// namespace InventoryManagmentSystem.Features.TransactionRecorded;
 
-public interface IArchivedTransaction
-{
-    void Archive();
-}
+// public interface IArchivedTransaction
+// {
+//     void Archive();
+// }

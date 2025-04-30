@@ -11,6 +11,6 @@ public class UpdateProductValidator : AbstractValidator<UpdateProductRequest>
         RuleFor(element => element.UpdatedProduct.Name).NotEmpty().NotNull();
         RuleFor(element => element.UpdatedProduct.LowStockThreshold).NotNull();
         RuleFor(element => element.UpdatedProduct.Price).NotNull();
-        RuleFor(element => element.UpdatedProduct.Quantity).NotNull();
+        RuleFor(element => element.UpdatedProduct.Description).NotEmpty();
     }
 }

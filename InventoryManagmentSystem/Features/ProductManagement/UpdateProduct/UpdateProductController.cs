@@ -17,7 +17,7 @@ public class UpdateProductController : ControllerBase
     }
 
     [HttpPut("[action]/{productId:int}")]
-    public async Task<ActionResult> UpdateProduct([FromRoute] int productId, [FromBody] Product product)
+    public async Task<ActionResult> UpdateProduct([FromRoute] int productId, [FromBody] ProductDTO product)
     {
         UpdateProductRequest updateProductRequest = new UpdateProductRequest() { OldProductID = productId, UpdatedProduct = product };
         Result<bool> updatedResult = await mediator.Send(updateProductRequest);

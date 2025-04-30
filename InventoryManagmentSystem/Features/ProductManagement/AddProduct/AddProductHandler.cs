@@ -20,9 +20,17 @@ public class AddProductHandler : IRequestHandler<AddProductRequest, Result<Produ
     {
         if (validator.Validate(request).IsValid)
         {
-            await unitOfWork.Product.AddAsync(request.NewProduct);
+            Product product = new Product()
+            {
+                Id = request.NewProduct.Id,
+                Name = request.NewProduct.Name,
+                Description = request.NewProduct.Description,
+                LowStockThreshold = request.NewProduct.LowStockThreshold,
+                Price = request.NewProduct.Price,
+            };
+            await unitOfWork.Product.AddAsync(product);
             await unitOfWork.SaveAsync();
-            return Result<Product>.Success(request.NewProduct);
+            return Result<Product>.Success(product);
         }
         return Result<Product>.Failure("Something Wrong With Add");
     }

@@ -17,7 +17,7 @@ public class AddProductController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> AddProduct([FromBody] Product product)
+    public async Task<ActionResult> AddProduct([FromBody] ProductDTO product)
     {
         var AddProductRequest = new AddProductRequest() { NewProduct = product };
         var result = await mediator.Send(AddProductRequest);

@@ -20,7 +20,15 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductRequest, Result
     {
         if (validator.Validate(request).IsValid)
         {
-            bool result = await unitOfWork.Product.UpdateAsync(element => element.ProductId == request.OldProductID, request.UpdatedProduct);
+            Product product = new Product()
+            {
+                Id = request.UpdatedProduct.Id,
+                Name = request.UpdatedProduct.Name,
+                Description = request.UpdatedProduct.Description,
+                LowStockThreshold = request.UpdatedProduct.LowStockThreshold,
+                Price = request.UpdatedProduct.Price,
+            };
+            bool result = await unitOfWork.Product.UpdateAsync(element => element.Id == request.OldProductID, product);
             if (result == true)
             {
                 await unitOfWork.SaveAsync();

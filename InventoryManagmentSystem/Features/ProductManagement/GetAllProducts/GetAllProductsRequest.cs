@@ -4,7 +4,7 @@ using MediatR;
 
 namespace InventoryManagmentSystem.Features.ProductManagement.GetAllProducts;
 
-public class GetAllProductsRequest : IRequest<Result<IEnumerable<Product>>>
+public class GetAllProductsRequest : IRequest<Result<IEnumerable<GetAllProductsResponse>>>
 {
-
+    
 }

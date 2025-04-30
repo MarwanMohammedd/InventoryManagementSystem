@@ -18,12 +18,15 @@ public class RemoveProductController : ControllerBase
     [HttpDelete("[action]/{productId:int}")]
     public async Task<ActionResult> RemoveProduct(int productId)
     {
-        RemoveProductRequest removeProductRequest = new RemoveProductRequest() { ProductId = productId };
-        Result<bool> result = await mediator.Send(removeProductRequest);
-        if (result.IsSuccess)
+        RemoveProductRequest removeProductRequest = new(){ProductId = productId};
+        if (ModelState.IsValid)
         {
-            return Ok(result);
+            Result<bool> result = await mediator.Send(removeProductRequest);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
         }
-        return NotFound(result);
+        return NotFound(Result<bool>.Failure("SomeThing Wrong"));
     }
 }

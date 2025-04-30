@@ -7,5 +7,5 @@ namespace InventoryManagmentSystem.Features.ProductManagement.UpdateProduct;
 public class UpdateProductRequest : IRequest<Result<bool>>
 {
     public int OldProductID { get; set; }
-    public Product UpdatedProduct { get; set; } = null!;
+    public ProductDTO UpdatedProduct { get; set; } = null!;
 }

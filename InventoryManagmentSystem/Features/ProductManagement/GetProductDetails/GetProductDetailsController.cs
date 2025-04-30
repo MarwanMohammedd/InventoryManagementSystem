@@ -21,7 +21,7 @@ public class GetProductDetailsController : ControllerBase
     public async Task<ActionResult> GetProductDetails(int productId)
     {
         GetProductDetailsRequest requset = new GetProductDetailsRequest() { ProductID = productId };
-        Result<Product> result = await mediator.Send(requset);
+        Result<GetProductDetailsResponse> result = await mediator.Send(requset);
         return Ok(result);
     }
 }
