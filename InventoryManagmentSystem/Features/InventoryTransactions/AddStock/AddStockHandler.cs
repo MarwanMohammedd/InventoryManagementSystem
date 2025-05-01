@@ -1,3 +1,4 @@
+using FluentValidation;
 using InventoryManagmentSystem.Shared.APIResult;
 using InventoryManagmentSystem.Shared.Model;
 using InventoryManagmentSystem.Shared.UnitOfWork;
@@ -10,15 +11,19 @@ namespace InventoryManagmentSystem.Features.InventoryTransactions.AddStock;
 public class AddStockHandler : IRequestHandler<AddStockRequest, Result<bool>>
 {
     private readonly IUnitOfWork unitOfWork;
+    private readonly IValidator<AddStockRequest> validator;
 
-    public AddStockHandler(IUnitOfWork unitOfWork)
+    public AddStockHandler(IUnitOfWork unitOfWork , IValidator<AddStockRequest> validator)
     {
         this.unitOfWork = unitOfWork;
+        this.validator = validator;
     }
 
     public async Task<Result<bool>> Handle(AddStockRequest request, CancellationToken cancellationToken)
     {
-        Product product = await unitOfWork.Product.GetItemAsync(product => product.Id == request.ProductId, product => product.Include(item => item.Inventories));
+        if(validator.Validate(request).IsValid)
+        {
+            Product product = await unitOfWork.Product.GetItemAsync(product => product.Id == request.ProductId, product => product.Include(item => item.Inventories));
 
         if (product is null)
         {
@@ -55,5 +60,7 @@ public class AddStockHandler : IRequestHandler<AddStockRequest, Result<bool>>
 
         await unitOfWork.Transaction.AddAsync(transaction);
         return Result<bool>.Success(true);
+        }
+        return Result<bool>.Failure("Something Wrong");
     }
 }

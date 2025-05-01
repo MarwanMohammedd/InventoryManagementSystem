@@ -11,7 +11,7 @@ public class LowStockReportController : ControllerBase
 {
     private readonly IMediator mediator;
 
-    public LowStockReportController(IUnitOfWork unitOfWork, IMediator mediator)
+    public LowStockReportController(IMediator mediator)
     {
         this.mediator = mediator;
     }
