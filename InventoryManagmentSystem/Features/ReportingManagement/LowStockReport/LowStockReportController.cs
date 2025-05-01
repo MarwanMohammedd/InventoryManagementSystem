@@ -9,12 +9,10 @@ namespace InventoryManagmentSystem.Features.ReportingManagement.LowStockReport;
 [Route("[controller]")]
 public class LowStockReportController : ControllerBase
 {
-    private readonly IUnitOfWork unitOfWork;
     private readonly IMediator mediator;
 
     public LowStockReportController(IUnitOfWork unitOfWork, IMediator mediator)
     {
-        this.unitOfWork = unitOfWork;
         this.mediator = mediator;
     }
 
