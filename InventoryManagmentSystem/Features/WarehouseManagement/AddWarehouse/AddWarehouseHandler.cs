@@ -27,6 +27,7 @@ public class AddWarehouseHandler : IRequestHandler<AddWarehouseRequest, Result<b
                 Name = request.Name,
             };
             await unitOfWork.Warehouse.AddAsync(warehouse);
+            await unitOfWork.SaveAsync();
             return Result<bool>.Success(true);
         }
         return Result<bool>.Failure("Invalid Adding WareHouse Operations");

@@ -1,4 +1,4 @@
-namespace InventoryManagmentSystem.Features.ProductManagement.GetAllProducts;
+namespace InventoryManagmentSystem.Features.ProductManagement;
 
 public class InventoryDTO
 {

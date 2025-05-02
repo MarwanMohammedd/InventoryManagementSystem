@@ -2,6 +2,7 @@ using InventoryManagmentSystem.Shared.APIResult;
 using InventoryManagmentSystem.Shared.Model;
 using InventoryManagmentSystem.Shared.UnitOfWork;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagmentSystem.Features.ReportingManagement.TransactionHistory;
 public class TransactionHistoryHandler : IRequestHandler<TransactionHistoryRequest, Result<TransactionHistoryResponse>>
@@ -20,12 +21,12 @@ public class TransactionHistoryHandler : IRequestHandler<TransactionHistoryReque
            toDate: request.ToDate,
            fromDate: request.FromDate,
            productCategory: request.ProductCategory,
-           productName: request.ProductName,
+           productId: request.ProductId,
            transactionType: request.TransactionType
         );
 
         IEnumerable<Transaction> transactions = await unitOfWork.Transaction.GetBySpecification(spec);
-        if (transactions is not null)
+        if (transactions.Count() != 0)
         {
             TransactionHistoryResponse transactionHistoryResponse = new()
             {
@@ -33,6 +34,6 @@ public class TransactionHistoryHandler : IRequestHandler<TransactionHistoryReque
             };
             return Result<TransactionHistoryResponse>.Success(transactionHistoryResponse);
         }
-        return Result<TransactionHistoryResponse>.Failure("There Is Data Retrived!");
+        return Result<TransactionHistoryResponse>.Failure("There Is No Data Retived");
     }
 }

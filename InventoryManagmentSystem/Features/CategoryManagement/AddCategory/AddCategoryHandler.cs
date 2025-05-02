@@ -25,6 +25,7 @@ public class AddCategoryHandler : IRequestHandler<AddCategoryRequest, Result<boo
                 CategoryName = request.CategoryName,
             };
             await unitOfWork.Category.AddAsync(category);
+            await unitOfWork.SaveAsync();
             return Result<bool>.Success(true);
         }
         return Result<bool>.Failure("Invalid Add Category Operation");

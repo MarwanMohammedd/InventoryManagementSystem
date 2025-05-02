@@ -51,7 +51,7 @@ public class RemoveStockHandler : IRequestHandler<RemoveStockRequest, Result<boo
             Type = TransactionType.Remove,
             Quantity = request.Quantity,
             Date = DateTime.UtcNow,
-            UserId = 1,
+            UserId = 2,
             ProductId = request.ProductId,
             ProductCategory = product.Category!.CategoryName,
             UserName = "System"

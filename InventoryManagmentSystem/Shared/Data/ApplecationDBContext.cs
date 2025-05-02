@@ -15,9 +15,15 @@ public class ApplecationDBContext : IdentityDbContext<ApplicationUser, Applicati
     {
 
     }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.LogTo(Console.WriteLine);
+    }
     override protected void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
         modelBuilder.ApplyConfiguration(new ApplicationRoleMapping());
         modelBuilder.ApplyConfiguration(new CategoryMapping());
         modelBuilder.ApplyConfiguration(new TransactionMapping());

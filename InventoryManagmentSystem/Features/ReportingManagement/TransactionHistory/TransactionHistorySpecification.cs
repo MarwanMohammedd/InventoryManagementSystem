@@ -12,18 +12,26 @@ public class TransactionHistorySpecification : ISpecification<Transaction>
     public Expression<Func<Transaction, bool>> Criteria { get; }
 
     public TransactionHistorySpecification(
-        string? productName,
+        int? productId,
         string? productCategory,
-        TransactionType? transactionType,
+        string? transactionType,
         DateTime? fromDate,
         DateTime? toDate)
     {
-        Criteria = transactionObject => 
-        (!fromDate.HasValue || transactionObject.Date >= fromDate ) &&
-        (!toDate.HasValue || transactionObject.Date <= toDate ) &&
-        (string.IsNullOrEmpty(productCategory) || transactionObject.Date >= fromDate ) &&
-        (string.IsNullOrEmpty(productName) || transactionObject.Product!.Name == productName ) &&
-        (!transactionType.HasValue || transactionObject.Type ==  transactionType) ;
+        TransactionType? parsedTransactionType = null;
+
+        if (!string.IsNullOrEmpty(transactionType) && Enum.TryParse(transactionType, out TransactionType parsed))
+        {
+            parsedTransactionType = parsed;
+        }
+
+        Criteria = transactionObject =>
+        (!fromDate.HasValue || transactionObject.Date >= fromDate) &&
+        (!toDate.HasValue || transactionObject.Date <= toDate) &&
+        (string.IsNullOrEmpty(productCategory) || transactionObject.Product!.Category!.CategoryName == productCategory) &&
+        (!productId.HasValue || transactionObject.Product!.Id == productId) &&
+        (!parsedTransactionType.HasValue || transactionObject.Type == parsedTransactionType);
+
     }
 
 

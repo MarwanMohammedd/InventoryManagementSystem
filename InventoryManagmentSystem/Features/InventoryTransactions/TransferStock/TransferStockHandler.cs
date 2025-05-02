@@ -66,7 +66,7 @@ public class TransferStockHandler : IRequestHandler<TransferStockRequest, Result
                 ToWareHouseId = request.ToWareHouseId,
                 Date = DateTime.UtcNow,
                 ProductCategory = product.Category!.CategoryName,
-                UserId = 1,
+                UserId = 2,
                 UserName = "System"
             });
             await unitOfWork.SaveAsync();

@@ -22,14 +22,11 @@ public class AddProductController : ControllerBase
     {
         if (ModelState.IsValid)
         {
-            var AddProductRequest = new AddProductRequest()
-            {
-                Id = product.Id,
-                Description = product.Description,
-                LowStockThreshold = product.LowStockThreshold,
-                Name = product.Name,
-                Price = product.Price
-            };
+            var AddProductRequest = new AddProductRequest() 
+            { CategoryId = product.CategoryId  , 
+            Description = product.Description ,
+             LowStockThreshold = product.LowStockThreshold ,
+              Name = product.Name , Price=product.Price}; 
             var result = await mediator.Send(AddProductRequest);
             if (result.IsSuccess)
             {

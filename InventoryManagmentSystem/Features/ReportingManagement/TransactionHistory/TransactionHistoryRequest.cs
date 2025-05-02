@@ -5,9 +5,9 @@ using MediatR;
 namespace InventoryManagmentSystem.Features.ReportingManagement.TransactionHistory;
 public class TransactionHistoryRequest : IRequest<Result<TransactionHistoryResponse>>
 {
-    public string? ProductName { get; set; }
+    public int? ProductId { get; set; }
     public string? ProductCategory { get; set; }
-    public TransactionType? TransactionType { get; set; }
+    public string? TransactionType { get; set; }
     public DateTime? FromDate { get; set; }
     public DateTime? ToDate { get; set; }
 }

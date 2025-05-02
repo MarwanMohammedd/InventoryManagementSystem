@@ -17,6 +17,7 @@ public class RemoveCategoryHandler : IRequestHandler<RemoveCategoryRequest, Resu
         bool result = await unitOfWork.Category.Delete(element => element.CategoryId == request.CategoryId);
         if(result)
         {
+            await unitOfWork.SaveAsync();
             return Result<string>.Success("Category Has Been Deleted Successfully!");
         }
             return Result<string>.Failure("Category Can Not Be Delete");

@@ -16,8 +16,8 @@ public class TransactionHistoryController : ControllerBase
         this.mediator = mediator;
     }
 
-    [HttpPost("[action]")]
-    public async Task<ActionResult> TransactionHistory([FromBody] TransactionHistoryDTO transactionHistoryDTO)
+    [HttpGet("GetTransactionHistory")]
+    public async Task<ActionResult> TransactionHistory([FromQuery] TransactionHistoryDTO transactionHistoryDTO)
     {
         TransactionHistoryRequest transactionHistoryRequest = new()
         {
@@ -25,7 +25,7 @@ public class TransactionHistoryController : ControllerBase
             FromDate = transactionHistoryDTO.FromDate,
             ToDate = transactionHistoryDTO.ToDate,
             ProductCategory = transactionHistoryDTO.ProductCategory,
-            ProductName = transactionHistoryDTO.ProductName,
+            ProductId = transactionHistoryDTO.ProductId,
         };
         var result = await mediator.Send(transactionHistoryRequest);
         if (result.IsSuccess)

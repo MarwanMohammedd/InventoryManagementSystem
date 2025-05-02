@@ -60,7 +60,7 @@ public class AddStockHandler : IRequestHandler<AddStockRequest, Result<bool>>
                 Quantity = request.Quantity,
                 Date = DateTime.UtcNow,
                 ProductCategory = product.Category!.CategoryName,
-                UserId = 1,
+                UserId = 2,
             });
             await unitOfWork.SaveAsync();
             return Result<bool>.Success(true);

@@ -14,9 +14,11 @@ public class RemoveWarehouseHandler : IRequestHandler<RemoveWarehouseRequest, Re
     }
     public async Task<Result<bool>> Handle(RemoveWarehouseRequest request, CancellationToken cancellationToken)
     {
-        bool result = await unitOfWork.Warehouse.Delete(element=>element.ID == request.WareHouseId);
-        if(result)
+        bool result = await unitOfWork.Warehouse.Delete(element => element.ID == request.WareHouseId);
+        if (result)
         {
+            await unitOfWork.SaveAsync();
+
             return Result<bool>.Success(true);
         }
         return Result<bool>.Failure("Invalid Warehouse Delete Opetation");

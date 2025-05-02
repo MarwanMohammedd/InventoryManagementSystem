@@ -9,6 +9,9 @@ public class AddProductValidator : AbstractValidator<AddProductRequest>
         RuleFor(element => element.Name)
         .NotNull()
         .WithMessage("Name Is Invalid");
+        RuleFor(element => element.CategoryId)
+        .NotEmpty()
+        .WithMessage("Category Id Is Invalid");
         RuleFor(element => element.Price)
         .NotNull()
         .WithMessage("Price Is Invalid");

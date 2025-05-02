@@ -22,11 +22,11 @@ public class AddProductHandler : IRequestHandler<AddProductRequest, Result<Produ
         {
             Product product = new Product()
             {
-                Id = request.Id,
                 Name = request.Name,
                 Description = request.Description,
                 LowStockThreshold = request.LowStockThreshold,
                 Price = request.Price,
+                CategoryId = request.CategoryId,
             };
             await unitOfWork.Product.AddAsync(product);
             await unitOfWork.SaveAsync();
