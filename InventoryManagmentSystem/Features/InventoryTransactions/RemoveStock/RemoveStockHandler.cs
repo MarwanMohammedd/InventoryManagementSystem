@@ -1,3 +1,4 @@
+using InventoryManagmentSystem.Features.LowStockNotifcation;
 using InventoryManagmentSystem.Features.TransactionRecorded;
 using InventoryManagmentSystem.Shared.APIResult;
 using InventoryManagmentSystem.Shared.Model;
@@ -56,6 +57,13 @@ public class RemoveStockHandler : IRequestHandler<RemoveStockRequest, Result<boo
             ProductCategory = product.Category!.CategoryName,
             UserName = "System"
         });
+
+
+        if(product.Inventories.Sum(i=> i.Quantity) < product.LowStockThreshold)
+        {
+            await mediator.Publish(new LowStockProductNotifcation(){ ProductName = product.Name});
+        }
+
 
         await unitOfWork.SaveAsync();
 

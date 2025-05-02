@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using InventoryManagmentSystem.Shared.Data;
 using InventoryManagmentSystem.Shared.Model;
 using InventoryManagmentSystem.Shared.SpeceficationPattern;
@@ -15,8 +16,8 @@ public class TransactionRepository : GenericRepository<Transaction>, ITransactio
 
     public async Task BulkTransactionArchivedUpdate()
     {
-        var oldTransactions = GetAllWithFilter(transaction => transaction.Date < DateTime.UtcNow.AddYears(-1));
-
+        var oldTransactions = GetAllWithFilter(transaction => transaction.Date < DateTime.UtcNow.AddYears(-1)).ToList();
+        
         foreach (var transaction in oldTransactions)
         {
             transaction.IsArchived = true;
@@ -27,6 +28,8 @@ public class TransactionRepository : GenericRepository<Transaction>, ITransactio
 
     public async Task<IEnumerable<Transaction>> GetBySpecification(ISpecification<Transaction> specification)
     {
+            
+
         return  await applicationDBContext.Transactions.AsQueryable().Where(specification.Criteria).ToListAsync();
     }
 }

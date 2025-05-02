@@ -7,6 +7,6 @@ public static class TransactionProcessExtension
 {
      public static void UseTransactionProcessHandler(this IApplicationBuilder applicationBuilder)
     {
-        applicationBuilder.UseMiddleware<TransactionProcessMiddelWare>();
+        applicationBuilder.UseMiddleware<TransactionProcessMiddleware>();
     }
 }

@@ -3,11 +3,11 @@ using InventoryManagmentSystem.Shared.APIResult;
 
 namespace InventoryManagmentSystem.Shared.GlobalErrorHandler;
 
-public class GlobalErrorHandlerMiddel : IMiddleware
+public class GlobalErrorHandlerMiddleware : IMiddleware
 {
-    private readonly ILogger<GlobalErrorHandlerMiddel> logger;
+    private readonly ILogger<GlobalErrorHandlerMiddleware> logger;
 
-    public GlobalErrorHandlerMiddel(ILogger<GlobalErrorHandlerMiddel> logger)
+    public GlobalErrorHandlerMiddleware(ILogger<GlobalErrorHandlerMiddleware> logger)
     {
         this.logger = logger;
     }
@@ -15,12 +15,12 @@ public class GlobalErrorHandlerMiddel : IMiddleware
     {
         try
         {
-          await next(context);
+            await next(context);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             logger.LogError(ex.Message);
-           await context.Response.WriteAsJsonAsync(Result<bool>.Failure(ex.Message));
+            await context.Response.WriteAsJsonAsync(Result<bool>.Failure(ex.Message));
         }
     }
 }

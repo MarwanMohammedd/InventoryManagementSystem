@@ -3,12 +3,12 @@ using InventoryManagmentSystem.Shared.UnitOfWork;
 
 namespace InventoryManagmentSystem.Shared.Registeration;
 
-public class TransactionProcessMiddelWare : IMiddleware
+public class TransactionProcessMiddleware : IMiddleware
 {
     private readonly IUnitOfWork unitOfWork;
-    private readonly ILogger<TransactionProcessMiddelWare> logger;
+    private readonly ILogger<TransactionProcessMiddleware> logger;
 
-    public TransactionProcessMiddelWare(IUnitOfWork unitOfWork, ILogger<TransactionProcessMiddelWare> logger)
+    public TransactionProcessMiddleware(IUnitOfWork unitOfWork, ILogger<TransactionProcessMiddleware> logger)
     {
         this.unitOfWork = unitOfWork;
         this.logger = logger;

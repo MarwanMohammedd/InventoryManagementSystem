@@ -4,6 +4,6 @@ public static class GlobalErrorHandlerExtension
 {
     public static void UseGlobalErrorHandler(this IApplicationBuilder applicationBuilder)
     {
-        applicationBuilder.UseMiddleware<GlobalErrorHandlerMiddel>();
+        applicationBuilder.UseMiddleware<GlobalErrorHandlerMiddleware>();
     }
 }

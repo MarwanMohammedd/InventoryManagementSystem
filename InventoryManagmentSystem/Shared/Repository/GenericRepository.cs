@@ -49,7 +49,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     /// Return a Nullable Item Of Entity
     /// </summary>
     /// <param name="expression">Lambda Expression</param>
-    /// <param name="Selector">Name Of Navigation Property</param>
+    /// <param name="include">Name Of Navigation Property</param>
     /// <returns>Task<TEntity?></returns>
     public async Task<TEntity?> GetItemAsync(
      Expression<Func<TEntity, bool>> predicate,

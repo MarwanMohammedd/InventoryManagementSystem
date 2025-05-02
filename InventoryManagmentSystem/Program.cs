@@ -2,9 +2,11 @@ using System.Reflection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hangfire;
+using InventoryManagmentSystem.Features.Jobs;
 using InventoryManagmentSystem.Shared.Data;
 using InventoryManagmentSystem.Shared.GlobalErrorHandler;
 using InventoryManagmentSystem.Shared.Model;
+using InventoryManagmentSystem.Shared.Registeration;
 using InventoryManagmentSystem.Shared.TransactionProcess;
 using InventoryManagmentSystem.Shared.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
@@ -21,8 +23,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 
-// builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+builder.Services.AddScoped<ArchivedTransaction>();
+builder.Services.AddScoped<DailyLowStockProducts>();
+builder.Services.AddScoped<GlobalErrorHandlerMiddleware>();
+builder.Services.AddScoped<TransactionProcessMiddleware>();
 
 
 builder.Services.AddDbContext<ApplecationDBContext>(
@@ -44,10 +50,10 @@ builder.Services.AddCors(option =>
         policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
     });
 });
+
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
-// builder.Services.AddScoped<ITransactionRecord, TransactionRecord>();
 
 builder.Services.AddMediatR(config =>
 {
@@ -56,8 +62,6 @@ builder.Services.AddMediatR(config =>
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-// builder.Services.AddScoped<IArchivedTransaction, ArchivedTransaction>();
-
 
 builder.Services.AddHangfire(configuration => configuration
         .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
@@ -94,15 +98,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-// app.UseGlobalErrorHandler();
-// app.UseTransactionProcessHandler();
+
+app.UseGlobalErrorHandler();
+app.UseTransactionProcessHandler();
 
 app.UseHttpsRedirection();
 
 app.UseHangfireDashboard();
 
-// RecurringJob.AddOrUpdate<IArchivedTransaction>("ArchiveJob", (archive) => archive.Archive(), Cron.Yearly);
-// RecurringJob.AddOrUpdate<IArchivedTransaction>("ArchiveJob", (archive) => archive.Archive(), Cron.Yearly);
+RecurringJob.AddOrUpdate<DailyLowStockProducts>("DailyLowStockProducts", (DailyLowStock) => DailyLowStock.Notify(), Cron.Daily);
+RecurringJob.AddOrUpdate<ArchivedTransaction>("ArchiveJob", (archive) => archive.Notify(), Cron.Yearly);
 
 app.MapControllers();
 
