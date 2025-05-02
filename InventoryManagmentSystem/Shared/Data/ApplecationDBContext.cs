@@ -19,10 +19,11 @@ public class ApplecationDBContext : IdentityDbContext<ApplicationUser, Applicati
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new ApplicationRoleMapping());
-        modelBuilder.ApplyConfiguration(new ProductMapping());
+        modelBuilder.ApplyConfiguration(new CategoryMapping());
         modelBuilder.ApplyConfiguration(new TransactionMapping());
         modelBuilder.ApplyConfiguration(new WarehouseMapping());
         modelBuilder.ApplyConfiguration(new InventoryMapping());
+        modelBuilder.ApplyConfiguration(new ProductMapping());
 
     }
 }

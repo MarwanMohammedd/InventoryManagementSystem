@@ -18,6 +18,8 @@ public class UnitOfWork : IUnitOfWork
 
     public IWarehouseRepository Warehouse { get; private set; }
 
+    public ICategoryRepository Category { get; private set; }
+
     public UnitOfWork(ApplecationDBContext applicationDBContext)
     {
         this.applicationDBContext = applicationDBContext;
@@ -25,6 +27,7 @@ public class UnitOfWork : IUnitOfWork
         Transaction = new TransactionRepository(this.applicationDBContext);
         Inventory = new InventoryRepository(this.applicationDBContext);
         Warehouse = new WarehouseRepository(this.applicationDBContext);
+        Category = new CategoryRepository(this.applicationDBContext);
     }
 
     public async Task CommitAsync()

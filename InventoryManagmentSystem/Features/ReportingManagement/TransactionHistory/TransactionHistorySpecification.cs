@@ -11,8 +11,6 @@ public class TransactionHistorySpecification : ISpecification<Transaction>
 {
     public Expression<Func<Transaction, bool>> Criteria { get; }
 
-    // public Func<IQueryable<Transaction>, IIncludableQueryable<Transaction, object>> IncludedOperation { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
     public TransactionHistorySpecification(
         string? productName,
         string? productCategory,

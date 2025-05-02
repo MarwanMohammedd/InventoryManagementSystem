@@ -16,6 +16,10 @@ public class TransactionRecordedValidator : AbstractValidator<TransactionRecorde
         .NotEmpty()
         .NotNull()
         .WithMessage("User Name is Not Valid");
+        RuleFor(element => element.ProductCategory)
+        .NotEmpty()
+        .NotNull()
+        .WithMessage("Product Category Name is Not Valid");
         RuleFor(element => element.Quantity)
         .NotEmpty()
         .WithMessage("Quantity is Not Valid");

@@ -26,7 +26,7 @@ public class AddStockHandler : IRequestHandler<AddStockRequest, Result<bool>>
     {
         if (validator.Validate(request).IsValid)
         {
-            Product product = await unitOfWork.Product.GetItemAsync(product => product.Id == request.ProductId, product => product.Include(item => item.Inventories));
+            Product product = await unitOfWork.Product.GetItemAsync(product => product.Id == request.ProductId, product => product.Include(item => item.Inventories).Include(item=>item.Category));
 
             if (product is null)
             {
@@ -59,6 +59,7 @@ public class AddStockHandler : IRequestHandler<AddStockRequest, Result<bool>>
                 ProductId = request.ProductId,
                 Quantity = request.Quantity,
                 Date = DateTime.UtcNow,
+                ProductCategory = product.Category!.CategoryName,
                 UserId = 1,
             });
             await unitOfWork.SaveAsync();

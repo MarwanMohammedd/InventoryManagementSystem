@@ -11,6 +11,7 @@ public interface IUnitOfWork : IDisposable
     public ITransactionRepository Transaction { get; }
     public IInventoryRepository Inventory { get; }
     public IWarehouseRepository Warehouse { get; }
+    public ICategoryRepository Category { get; }
     Task StartTransactionAsync();
     Task RollBackAsync();
     Task CommitAsync();

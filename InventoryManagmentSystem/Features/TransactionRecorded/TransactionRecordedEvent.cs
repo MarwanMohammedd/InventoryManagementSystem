@@ -30,7 +30,8 @@ public class TransactionRecordedEvent : INotificationHandler<TransactionRecorded
                     Quantity = notification.Quantity,
                     Type = notification.Type,
                     FromWarehouseId = notification.FromWareHouseId ,
-                    ToWarehouseId = notification.ToWareHouseId
+                    ToWarehouseId = notification.ToWareHouseId,
+                    ProductCategory = notification.ProductCategory,
                 };
                 await unitOfWork.Transaction.AddAsync(transaction);
             }

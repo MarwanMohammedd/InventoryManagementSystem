@@ -20,7 +20,9 @@ public class RemoveStockHandler : IRequestHandler<RemoveStockRequest, Result<boo
     }
     public async Task<Result<bool>> Handle(RemoveStockRequest request, CancellationToken cancellationToken)
     {
-        Product product = await unitOfWork.Product.GetItemAsync(product => product.Id == request.ProductId, product => product.Include(product => product.Inventories));
+        Product product = await unitOfWork.Product.GetItemAsync
+        (product => product.Id == request.ProductId,
+         product => product.Include(product => product.Inventories).Include(item => item.Category));
         if (product is null)
         {
             return Result<bool>.Failure("Product is not found");
@@ -51,6 +53,7 @@ public class RemoveStockHandler : IRequestHandler<RemoveStockRequest, Result<boo
             Date = DateTime.UtcNow,
             UserId = 1,
             ProductId = request.ProductId,
+            ProductCategory = product.Category!.CategoryName,
             UserName = "System"
         });
 

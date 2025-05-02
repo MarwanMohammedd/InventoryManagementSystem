@@ -28,7 +28,7 @@ public class TransferStockHandler : IRequestHandler<TransferStockRequest, Result
         {
             Product product = await unitOfWork.Product.GetItemAsync(
                     p => p.Id == request.ProductId,
-                    q => q.Include(p => p.Inventories!));
+                    q => q.Include(p => p.Inventories!).Include(item=>item.Category));
 
             if (product is null)
                 return Result<bool>.Failure("Product Not Found");
@@ -65,6 +65,7 @@ public class TransferStockHandler : IRequestHandler<TransferStockRequest, Result
                 FromWareHouseId = request.FromWareHouseId,
                 ToWareHouseId = request.ToWareHouseId,
                 Date = DateTime.UtcNow,
+                ProductCategory = product.Category!.CategoryName,
                 UserId = 1,
                 UserName = "System"
             });

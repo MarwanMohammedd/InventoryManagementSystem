@@ -13,6 +13,7 @@ public class Transaction
     public int? FromWarehouseId { get; set; } 
     public int? ToWarehouseId { get; set; }  
     public string UserName { get; set; }  = null!;
+    public string ProductCategory { get; set; }  = null!;
     
     [ForeignKey("User")]
     public int UserId { get; set; }
