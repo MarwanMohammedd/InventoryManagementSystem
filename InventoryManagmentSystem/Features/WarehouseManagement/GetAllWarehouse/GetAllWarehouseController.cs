@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagmentSystem.Features.WarehouseManagement.GetAllWarehouse;
@@ -7,6 +8,7 @@ namespace InventoryManagmentSystem.Features.WarehouseManagement.GetAllWarehouse;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class GetAllWarehouseController : ControllerBase
 {
     private readonly IMediator mediator;

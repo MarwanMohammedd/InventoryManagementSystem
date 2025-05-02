@@ -2,12 +2,14 @@ using System.Threading.Tasks;
 using InventoryManagmentSystem.Shared.APIResult;
 using InventoryManagmentSystem.Shared.UnitOfWork;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagmentSystem.Features.InventoryTransactions.AddStock;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class AddStockController : ControllerBase
 {
     private readonly IMediator mediator;

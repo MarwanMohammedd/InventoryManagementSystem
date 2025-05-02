@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using InventoryManagmentSystem.Shared.APIResult;
 using InventoryManagmentSystem.Shared.UnitOfWork;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagmentSystem.Features.WarehouseManagement.AddWarehouse;
@@ -9,6 +10,7 @@ namespace InventoryManagmentSystem.Features.WarehouseManagement.AddWarehouse;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class AddWarehouseController : ControllerBase
 {
     private readonly IUnitOfWork unitOfWork;

@@ -1,11 +1,14 @@
 using InventoryManagmentSystem.Shared.APIResult;
+using InventoryManagmentSystem.Shared.Utilities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagmentSystem.Features.ProductManagement.RemoveProduct;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(Roles = Roles.Admin)]
 public class RemoveProductController : ControllerBase
 {
     private readonly IMediator mediator;

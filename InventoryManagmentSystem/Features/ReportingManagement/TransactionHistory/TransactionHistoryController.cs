@@ -1,12 +1,15 @@
 using System.Threading.Tasks;
 using InventoryManagmentSystem.Shared.APIResult;
+using InventoryManagmentSystem.Shared.Utilities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagmentSystem.Features.ReportingManagement.TransactionHistory;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(Roles = Roles.Admin)]
 public class TransactionHistoryController : ControllerBase
 {
     private readonly IMediator mediator;

@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using InventoryManagmentSystem.Shared.APIResult;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagmentSystem.Features.CategoryManagement.RemoveCategory;
@@ -8,6 +9,7 @@ namespace InventoryManagmentSystem.Features.CategoryManagement.RemoveCategory;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class RemoveCategoryController : ControllerBase
 {
     private readonly IMediator mediator;

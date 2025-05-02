@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagmentSystem.Features.CategoryManagement.GetAllCategory;
@@ -7,6 +8,7 @@ namespace InventoryManagmentSystem.Features.CategoryManagement.GetAllCategory;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class GetAllCategoryController : ControllerBase
 {
     private readonly IMediator mediator;

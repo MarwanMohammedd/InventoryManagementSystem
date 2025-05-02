@@ -1,16 +1,21 @@
 using System.Reflection;
+using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hangfire;
+using InventoryManagmentSystem.Features.AccountManagement.Register;
 using InventoryManagmentSystem.Features.Jobs;
+using InventoryManagmentSystem.Shared.Configuration;
 using InventoryManagmentSystem.Shared.Data;
 using InventoryManagmentSystem.Shared.GlobalErrorHandler;
 using InventoryManagmentSystem.Shared.Model;
 using InventoryManagmentSystem.Shared.Registeration;
 using InventoryManagmentSystem.Shared.TransactionProcess;
 using InventoryManagmentSystem.Shared.UnitOfWork;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
 
@@ -30,6 +35,30 @@ builder.Services.AddScoped<DailyLowStockProducts>();
 builder.Services.AddScoped<GlobalErrorHandlerMiddleware>();
 builder.Services.AddScoped<TransactionProcessMiddleware>();
 
+builder.Services.AddScoped<IRegisterService, RegisterService>();
+
+builder.Services.Configure<JWT>(builder.Configuration.GetSection(JWT.SectionName));
+
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(option =>
+{
+    option.RequireHttpsMetadata = false;
+    option.SaveToken = false;
+    option.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!))
+
+    };
+});
+
 
 builder.Services.AddDbContext<ApplecationDBContext>(
     option =>
@@ -39,7 +68,7 @@ builder.Services.AddDbContext<ApplecationDBContext>(
 );
 
 
-builder.Services.AddIdentity<ApplicationUser , ApplicationRole>()
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
 .AddEntityFrameworkStores<ApplecationDBContext>();
 // .AddDefaultTokenProviders();
 
@@ -72,23 +101,6 @@ builder.Services.AddHangfire(configuration => configuration
 // Add the processing server as IHostedService
 builder.Services.AddHangfireServer();
 
-// builder.Logging.ClearProviders();
-
-// Serilog.Log.Logger = new LoggerConfiguration()
-// // .WriteTo.Seq("url:5341") tool for display logs <use it marwan>
-// .WriteTo.MSSqlServer(
-//      connectionString: builder.Configuration.GetConnectionString("LogsConnectionString"),
-//         sinkOptions: new MSSqlServerSinkOptions
-//         {
-//             AutoCreateSqlDatabase = true,
-//             AutoCreateSqlTable = true,
-//             TableName = "Logs"
-//         },
-//         restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information
-// ).CreateLogger();
-
-// builder.Host.UseSerilog();
-
 
 var app = builder.Build();
 
@@ -103,6 +115,10 @@ app.UseGlobalErrorHandler();
 app.UseTransactionProcessHandler();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 
 app.UseHangfireDashboard();
 

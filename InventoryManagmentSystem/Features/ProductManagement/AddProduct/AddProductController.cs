@@ -2,12 +2,14 @@ using System.Threading.Tasks;
 using InventoryManagmentSystem.Shared.APIResult;
 using InventoryManagmentSystem.Shared.Model;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagmentSystem.Features.ProductManagement.AddProduct;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class AddProductController : ControllerBase
 {
     private readonly IMediator mediator;

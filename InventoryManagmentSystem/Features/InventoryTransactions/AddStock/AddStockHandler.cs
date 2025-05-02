@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using FluentValidation;
 using InventoryManagmentSystem.Features.TransactionRecorded;
 using InventoryManagmentSystem.Shared.APIResult;
@@ -5,18 +6,21 @@ using InventoryManagmentSystem.Shared.Model;
 using InventoryManagmentSystem.Shared.UnitOfWork;
 using InventoryManagmentSystem.Shared.Utilities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagmentSystem.Features.InventoryTransactions.AddStock;
 
 public class AddStockHandler : IRequestHandler<AddStockRequest, Result<bool>>
 {
+    private readonly UserManager<ApplicationUser> userManager;
     private readonly IUnitOfWork unitOfWork;
     private readonly IValidator<AddStockRequest> validator;
     private readonly IMediator mediator;
 
-    public AddStockHandler(IUnitOfWork unitOfWork, IValidator<AddStockRequest> validator, IMediator mediator)
+    public AddStockHandler(UserManager<ApplicationUser> userManager , IUnitOfWork unitOfWork, IValidator<AddStockRequest> validator, IMediator mediator)
     {
+        this.userManager = userManager;
         this.unitOfWork = unitOfWork;
         this.validator = validator;
         this.mediator = mediator;

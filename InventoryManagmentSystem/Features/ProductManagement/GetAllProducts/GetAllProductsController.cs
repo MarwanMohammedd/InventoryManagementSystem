@@ -1,11 +1,13 @@
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagmentSystem.Features.ProductManagement.GetAllProducts;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class GetAllProductsController : ControllerBase
 {
     private readonly IMediator mediator;

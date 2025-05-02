@@ -3,12 +3,14 @@ using InventoryManagmentSystem.Shared.APIResult;
 using InventoryManagmentSystem.Shared.Model;
 using InventoryManagmentSystem.Shared.UnitOfWork;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagmentSystem.Features.InventoryTransactions.RemoveStock;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class RemoveStockController : ControllerBase
 {
     private readonly IMediator mediator;

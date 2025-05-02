@@ -2,12 +2,15 @@ using System.Threading.Tasks;
 using InventoryManagmentSystem.Shared.APIResult;
 using InventoryManagmentSystem.Shared.UnitOfWork;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagmentSystem.Features.InventoryTransactions.TransferStock;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
+
 public class TransferStockController : ControllerBase
 {
     private readonly IMediator mediator;
@@ -34,9 +37,9 @@ public class TransferStockController : ControllerBase
             {
                 return Ok(result);
             }
-             return BadRequest(result);
+            return BadRequest(result);
         }
-       return BadRequest(Result<bool>.Failure("Input Data is not valid"));
+        return BadRequest(Result<bool>.Failure("Input Data is not valid"));
     }
 
 }
