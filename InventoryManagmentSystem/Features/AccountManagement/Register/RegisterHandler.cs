@@ -64,7 +64,7 @@ public class RegisterHandler : IRequestHandler<RegisterRequest, Result<RegisterR
                     Token = await registerService.GenerateToken(applciationUser),
                     Message = "User Registeration Successfully"
                 };
-                await signInManager.SignInAsync(applciationUser, isPersistent: true);
+                // await signInManager.SignInAsync(applciationUser, isPersistent: false);
                 return Result<RegisterResponse>.Success(registerResponse);
             }
             else
