@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using InventoryManagmentSystem.Shared.APIResult;
 using InventoryManagmentSystem.Shared.UnitOfWork;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -22,12 +23,16 @@ public class AddWarehouseController : ControllerBase
     [HttpPost("[action]")]
     public async Task<ActionResult> AddWarehouse([FromBody] AddWarehouseDTO addWarehouseDTO)
     {
-        AddWarehouseRequest addWarehouseRequest = new() { Location = addWarehouseDTO.Location, Name = addWarehouseDTO.Name };
-        var result = await mediator.Send(addWarehouseRequest);
-        if (result.IsSuccess)
+        if (ModelState.IsValid)
         {
-            return Ok(result);
+            AddWarehouseRequest addWarehouseRequest = new() { Location = addWarehouseDTO.Location, Name = addWarehouseDTO.Name };
+            var result = await mediator.Send(addWarehouseRequest);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
-        return BadRequest(result);
+        return BadRequest(Result<bool>.Failure("Input Data is not valid"));
     }
 }

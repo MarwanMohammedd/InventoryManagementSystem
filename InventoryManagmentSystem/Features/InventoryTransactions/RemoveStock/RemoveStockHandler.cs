@@ -1,3 +1,4 @@
+using InventoryManagmentSystem.Features.TransactionRecorded;
 using InventoryManagmentSystem.Shared.APIResult;
 using InventoryManagmentSystem.Shared.Model;
 using InventoryManagmentSystem.Shared.UnitOfWork;
@@ -10,10 +11,12 @@ namespace InventoryManagmentSystem.Features.InventoryTransactions.RemoveStock;
 public class RemoveStockHandler : IRequestHandler<RemoveStockRequest, Result<bool>>
 {
     private readonly IUnitOfWork unitOfWork;
+    private readonly IMediator mediator;
 
-    public RemoveStockHandler(IUnitOfWork unitOfWork)
+    public RemoveStockHandler(IUnitOfWork unitOfWork, IMediator mediator)
     {
         this.unitOfWork = unitOfWork;
+        this.mediator = mediator;
     }
     public async Task<Result<bool>> Handle(RemoveStockRequest request, CancellationToken cancellationToken)
     {
@@ -36,12 +39,12 @@ public class RemoveStockHandler : IRequestHandler<RemoveStockRequest, Result<boo
             return Result<bool>.Failure("Not enough stock in the selected warehouse.");
         }
 
-      
-      
+
+
         inventory.Quantity -= request.Quantity;
 
 
-        Transaction transaction = new()
+        await mediator.Publish(new TransactionRecordedNotification
         {
             Type = TransactionType.Remove,
             Quantity = request.Quantity,
@@ -49,9 +52,9 @@ public class RemoveStockHandler : IRequestHandler<RemoveStockRequest, Result<boo
             UserId = 1,
             ProductId = request.ProductId,
             UserName = "System"
-        };
+        });
 
-        await unitOfWork.Transaction.AddAsync(transaction);
+        await unitOfWork.SaveAsync();
 
         return Result<bool>.Success(true);
     }

@@ -19,11 +19,6 @@ public class GetProductDetailsHandler : IRequestHandler<GetProductDetailsRequest
         Product? product = await unitOfWork.Product.GetItemAsync(item => item.Id == request.ProductID, p=>p.Include(pp=>pp.Inventories).ThenInclude(i=>i.Warehouse));
         if (product is not null)
         {
-            // int totalQuantity;
-            // if (unitOfWork.Product.GetTotalQuantityForProduct(product!.Id, out totalQuantity))
-            // {
-            // }
-
             GetProductDetailsResponse getProductDetailsResponse = new()
             {
                 ProductID = product.Id,

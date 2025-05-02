@@ -1,5 +1,6 @@
 using FluentValidation;
 using InventoryManagmentSystem.Shared.APIResult;
+using InventoryManagmentSystem.Shared.Model;
 using InventoryManagmentSystem.Shared.UnitOfWork;
 using MediatR;
 
@@ -10,7 +11,6 @@ public class AddWarehouseHandler : IRequestHandler<AddWarehouseRequest, Result<b
 {
     private readonly IUnitOfWork unitOfWork;
     private readonly IValidator<AddWarehouseRequest> validator;
-    private readonly IMediator mediator;
 
     public AddWarehouseHandler(IUnitOfWork unitOfWork, IValidator<AddWarehouseRequest> validator)
     {
@@ -22,8 +22,13 @@ public class AddWarehouseHandler : IRequestHandler<AddWarehouseRequest, Result<b
 
         if (validator.Validate(request).IsValid)
         {
+            Warehouse warehouse = new (){
+                Location = request.Location,
+                Name = request.Name,
+            };
+            await unitOfWork.Warehouse.AddAsync(warehouse);
             return Result<bool>.Success(true);
         }
-        return Result<bool>.Failure("");
+        return Result<bool>.Failure("Invalid Adding WareHouse Operations");
     }
 }

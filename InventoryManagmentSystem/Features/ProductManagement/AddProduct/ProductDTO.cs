@@ -1,10 +1,7 @@
-using InventoryManagmentSystem.Shared.APIResult;
-using InventoryManagmentSystem.Shared.Model;
-using MediatR;
-
 namespace InventoryManagmentSystem.Features.ProductManagement.AddProduct;
 
-public class AddProductRequest : IRequest<Result<Product>>
+
+public class ProductDTO 
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;

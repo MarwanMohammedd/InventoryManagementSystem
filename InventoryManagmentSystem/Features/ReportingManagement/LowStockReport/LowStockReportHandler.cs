@@ -16,7 +16,8 @@ public class LowStockReportHandler : IRequestHandler<LowStockReportRequest, Resu
     }
     public async Task<Result<IEnumerable<LowStockReportResponse>>> Handle(LowStockReportRequest request, CancellationToken cancellationToken)
     {
-        var products = await unitOfWork.Product.ReadAllAsync(product => product.Include(p => p.Inventories).ThenInclude(i => i.Warehouse));
+        IEnumerable<Product> products = await unitOfWork.Product.ReadAllAsync
+        (product => product.Include(p => p.Inventories).ThenInclude(i => i.Warehouse));
 
         if (products is not null)
         {

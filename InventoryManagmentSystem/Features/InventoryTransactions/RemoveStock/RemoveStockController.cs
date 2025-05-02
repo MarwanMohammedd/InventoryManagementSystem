@@ -11,23 +11,23 @@ namespace InventoryManagmentSystem.Features.InventoryTransactions.RemoveStock;
 [Route("[controller]")]
 public class RemoveStockController : ControllerBase
 {
-    private readonly IUnitOfWork unitOfWork;
     private readonly IMediator mediator;
 
-    public RemoveStockController(IUnitOfWork unitOfWork, IMediator mediator)
+    public RemoveStockController(IMediator mediator)
     {
-        this.unitOfWork = unitOfWork;
         this.mediator = mediator;
     }
     [HttpDelete("[action]")]
     public async Task<ActionResult> RemoveStock([FromBody] RemoveStockDTO removeStockDTO)
     {
-        RemoveStockRequest removeStockRequest = new() { ProductId = removeStockDTO.ProductId , Quantity = removeStockDTO.Quantity , WarehouseId = removeStockDTO.WarehouseId};
-        var result = await mediator.Send(removeStockRequest);
-        if (result.IsSuccess)
+        if (ModelState.IsValid)
         {
-            await unitOfWork.SaveAsync();
-            return Ok(Result<bool>.Success(true));
+            RemoveStockRequest removeStockRequest = new() { ProductId = removeStockDTO.ProductId, Quantity = removeStockDTO.Quantity, WarehouseId = removeStockDTO.WarehouseId };
+            var result = await mediator.Send(removeStockRequest);
+            if (result.IsSuccess)
+            {
+                return Ok(Result<bool>.Success(true));
+            }
         }
         return NotFound(Result<bool>.Failure("Inventory Is Not Exsit"));
     }

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,5 +14,16 @@ public class RemoveWarehouseController : ControllerBase
     {
         this.mediator = mediator;
     }
-    
+
+    [HttpDelete("[action]/{warehouseId:int}")]
+    public async Task<ActionResult> DeleteWareHouse(int warehouseId)
+    {
+        RemoveWarehouseRequest removeWarehouseRequest = new() { WareHouseId = warehouseId };
+        var result = await mediator.Send(removeWarehouseRequest);
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+        return BadRequest(result);
+    }
 }

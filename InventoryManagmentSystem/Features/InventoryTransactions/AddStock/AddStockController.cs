@@ -10,12 +10,10 @@ namespace InventoryManagmentSystem.Features.InventoryTransactions.AddStock;
 [Route("[controller]")]
 public class AddStockController : ControllerBase
 {
-    private readonly IUnitOfWork unitOfWork;
     private readonly IMediator mediator;
 
-    public AddStockController(IUnitOfWork unitOfWork, IMediator mediator)
+    public AddStockController(IMediator mediator)
     {
-        this.unitOfWork = unitOfWork;
         this.mediator = mediator;
     }
 
@@ -26,9 +24,8 @@ public class AddStockController : ControllerBase
         Result<bool> result = await mediator.Send(addStockRequest);
         if (result.IsSuccess)
         {
-            await unitOfWork.SaveAsync();
-            return Ok(Result<bool>.Success(true));
+            return Ok(result);
         }
-        return BadRequest(Result<bool>.Failure("Something Wrong with Add Stock"));
+        return BadRequest(result);
     }
 }

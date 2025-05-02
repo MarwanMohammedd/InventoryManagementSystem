@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using InventoryManagmentSystem.Shared.APIResult;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +16,22 @@ public class TransactionHistoryController : ControllerBase
         this.mediator = mediator;
     }
 
-    [HttpGet]
-    public ActionResult TransactionHistory()
+    [HttpPost("[action]")]
+    public async Task<ActionResult> TransactionHistory([FromBody] TransactionHistoryDTO transactionHistoryDTO)
     {
-        return Ok();
+        TransactionHistoryRequest transactionHistoryRequest = new()
+        {
+            TransactionType = transactionHistoryDTO.TransactionType,
+            FromDate = transactionHistoryDTO.FromDate,
+            ToDate = transactionHistoryDTO.ToDate,
+            ProductCategory = transactionHistoryDTO.ProductCategory,
+            ProductName = transactionHistoryDTO.ProductName,
+        };
+        var result = await mediator.Send(transactionHistoryRequest);
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+        return BadRequest(result);
     }
 }

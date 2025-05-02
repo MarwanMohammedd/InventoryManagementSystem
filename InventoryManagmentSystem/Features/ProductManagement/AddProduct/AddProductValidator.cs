@@ -6,10 +6,18 @@ public class AddProductValidator : AbstractValidator<AddProductRequest>
 {
     public AddProductValidator()
     {
-        RuleFor(element=>element.NewProduct).NotNull();
-        RuleFor(element=>element.NewProduct.Name).NotNull();
-        RuleFor(element=>element.NewProduct.Price).NotNull();
-        RuleFor(element=>element.NewProduct.LowStockThreshold).NotNull();
-        RuleFor(element=>element.NewProduct.Description).NotEmpty().NotNull();
+        RuleFor(element => element.Name)
+        .NotNull()
+        .WithMessage("Name Is Invalid");
+        RuleFor(element => element.Price)
+        .NotNull()
+        .WithMessage("Price Is Invalid");
+        RuleFor(element => element.LowStockThreshold)
+        .NotNull()
+        .WithMessage("LowStockThreshold is Invalid");
+        RuleFor(element => element.Description)
+        .NotEmpty()
+        .NotNull()
+        .WithMessage("Description is Invalid");
     }
 }

@@ -1,9 +1,8 @@
-using InventoryManagmentSystem.Shared.APIResult;
 using InventoryManagmentSystem.Shared.Utilities;
-using MediatR;
 
 namespace InventoryManagmentSystem.Features.ReportingManagement.TransactionHistory;
-public class TransactionHistoryRequest : IRequest<Result<TransactionHistoryResponse>>
+
+public class TransactionHistoryDTO
 {
     public string? ProductName { get; set; }
     public string? ProductCategory { get; set; }

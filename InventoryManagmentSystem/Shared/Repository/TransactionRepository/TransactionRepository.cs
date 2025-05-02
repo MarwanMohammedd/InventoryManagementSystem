@@ -1,5 +1,7 @@
 using InventoryManagmentSystem.Shared.Data;
 using InventoryManagmentSystem.Shared.Model;
+using InventoryManagmentSystem.Shared.SpeceficationPattern;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagmentSystem.Shared.Repository.TransactionRepository;
 public class TransactionRepository : GenericRepository<Transaction>, ITransactionRepository
@@ -11,7 +13,7 @@ public class TransactionRepository : GenericRepository<Transaction>, ITransactio
         this.applicationDBContext = applicationDBContext;
     }
 
-    public void BulkTransactionArchivedUpdate()
+    public async Task BulkTransactionArchivedUpdate()
     {
         var oldTransactions = GetAllWithFilter(transaction => transaction.Date < DateTime.UtcNow.AddYears(-1));
 
@@ -20,6 +22,11 @@ public class TransactionRepository : GenericRepository<Transaction>, ITransactio
             transaction.IsArchived = true;
         }
         
-        applicationDBContext.SaveChanges();
+        await applicationDBContext.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<Transaction>> GetBySpecification(ISpecification<Transaction> specification)
+    {
+        return  await applicationDBContext.Transactions.AsQueryable().Where(specification.Criteria).ToListAsync();
     }
 }

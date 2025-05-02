@@ -1,4 +1,4 @@
-namespace InventoryManagmentSystem.Features.ProductManagement;
+namespace InventoryManagmentSystem.Features.ProductManagement.UpdateProduct;
 
 
 public class ProductDTO 
