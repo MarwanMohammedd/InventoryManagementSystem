@@ -3,21 +3,19 @@ using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hangfire;
-using InventoryManagmentSystem.Features.AccountManagement.Register;
-using InventoryManagmentSystem.Features.Jobs;
+using InventoryManagmentSystem.Features.AccountManagement.Models;
+using InventoryManagmentSystem.Features.ProductManagement.Jobs;
+using InventoryManagmentSystem.Features.ReportingManagement.Jobs;
 using InventoryManagmentSystem.Shared.Configuration;
 using InventoryManagmentSystem.Shared.Data;
 using InventoryManagmentSystem.Shared.GlobalErrorHandler;
-using InventoryManagmentSystem.Shared.Model;
 using InventoryManagmentSystem.Shared.Registeration;
 using InventoryManagmentSystem.Shared.TransactionProcess;
-using InventoryManagmentSystem.Shared.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Serilog;
-using Serilog.Sinks.MSSqlServer;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,35 +25,31 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-builder.Services.AddScoped<ArchivedTransaction>();
-builder.Services.AddScoped<DailyLowStockProducts>();
-builder.Services.AddScoped<GlobalErrorHandlerMiddleware>();
-builder.Services.AddScoped<TransactionProcessMiddleware>();
-
-builder.Services.AddScoped<IRegisterService, RegisterService>();
+builder.Services.ApplicationRegistrationServices();
 
 builder.Services.Configure<JWT>(builder.Configuration.GetSection(JWT.SectionName));
 
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(option =>
 {
     option.RequireHttpsMetadata = false;
-    option.SaveToken = false;
+    option.SaveToken = true;
     option.TokenValidationParameters = new TokenValidationParameters()
     {
         ValidateIssuerSigningKey = true,
         ValidateIssuer = true,
+        ValidateAudience = true,
         ValidIssuer = builder.Configuration["JWT:Issuer"],
         ValidAudience = builder.Configuration["JWT:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!))
-
     };
 });
 
@@ -70,7 +64,7 @@ builder.Services.AddDbContext<ApplecationDBContext>(
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
 .AddEntityFrameworkStores<ApplecationDBContext>();
-// .AddDefaultTokenProviders();
+
 
 builder.Services.AddCors(option =>
 {
@@ -90,13 +84,12 @@ builder.Services.AddMediatR(config =>
 });
 
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddHangfire(configuration => configuration
         .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
         .UseSimpleAssemblyNameTypeSerializer()
         .UseRecommendedSerializerSettings()
-        .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnectionString")));
+        .UseSqlServerStorage(builder.Configuration.GetConnectionString("LogsConnectionString")));
 
 // Add the processing server as IHostedService
 builder.Services.AddHangfireServer();
@@ -111,19 +104,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseGlobalErrorHandler();
+// app.UseGlobalErrorHandler();
 app.UseTransactionProcessHandler();
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
 app.UseHangfireDashboard();
 
-RecurringJob.AddOrUpdate<DailyLowStockProducts>("DailyLowStockProducts", (DailyLowStock) => DailyLowStock.Notify(), Cron.Daily);
-RecurringJob.AddOrUpdate<ArchivedTransaction>("ArchiveJob", (archive) => archive.Notify(), Cron.Yearly);
+RecurringJob.AddOrUpdate<IDailyLowStockProducts>("DailyLowStockProducts", (DailyLowStock) => DailyLowStock.Notify(), Cron.Daily);
+RecurringJob.AddOrUpdate<IArchivedTransaction>("ArchiveJob", (archive) => archive.Notify(), Cron.Monthly);
 
 app.MapControllers();
 

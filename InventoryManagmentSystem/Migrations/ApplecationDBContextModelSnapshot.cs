@@ -22,7 +22,7 @@ namespace InventoryManagmentSystem.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("InventoryManagmentSystem.Shared.Model.ApplicationRole", b =>
+            modelBuilder.Entity("InventoryManagmentSystem.Features.AccountManagement.Models.ApplicationRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -66,7 +66,7 @@ namespace InventoryManagmentSystem.Migrations
                         });
                 });
 
-            modelBuilder.Entity("InventoryManagmentSystem.Shared.Model.ApplicationUser", b =>
+            modelBuilder.Entity("InventoryManagmentSystem.Features.AccountManagement.Models.ApplicationUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -142,7 +142,7 @@ namespace InventoryManagmentSystem.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("InventoryManagmentSystem.Shared.Model.Category", b =>
+            modelBuilder.Entity("InventoryManagmentSystem.Features.CategoryManagement.Models.Category", b =>
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
@@ -176,7 +176,7 @@ namespace InventoryManagmentSystem.Migrations
                         });
                 });
 
-            modelBuilder.Entity("InventoryManagmentSystem.Shared.Model.Inventory", b =>
+            modelBuilder.Entity("InventoryManagmentSystem.Features.InventoryTransactions.Models.Inventory", b =>
                 {
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -194,7 +194,7 @@ namespace InventoryManagmentSystem.Migrations
                     b.ToTable("inventories");
                 });
 
-            modelBuilder.Entity("InventoryManagmentSystem.Shared.Model.Product", b =>
+            modelBuilder.Entity("InventoryManagmentSystem.Features.ProductManagement.Models.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -318,7 +318,7 @@ namespace InventoryManagmentSystem.Migrations
                         });
                 });
 
-            modelBuilder.Entity("InventoryManagmentSystem.Shared.Model.Transaction", b =>
+            modelBuilder.Entity("InventoryManagmentSystem.Features.ReportingManagement.Models.TransactionEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -355,10 +355,6 @@ namespace InventoryManagmentSystem.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FromWarehouseId");
@@ -372,7 +368,7 @@ namespace InventoryManagmentSystem.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("InventoryManagmentSystem.Shared.Model.Warehouse", b =>
+            modelBuilder.Entity("InventoryManagmentSystem.Features.WarehouseManagement.Models.Warehouse", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -516,15 +512,15 @@ namespace InventoryManagmentSystem.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("InventoryManagmentSystem.Shared.Model.Inventory", b =>
+            modelBuilder.Entity("InventoryManagmentSystem.Features.InventoryTransactions.Models.Inventory", b =>
                 {
-                    b.HasOne("InventoryManagmentSystem.Shared.Model.Product", "Product")
+                    b.HasOne("InventoryManagmentSystem.Features.ProductManagement.Models.Product", "Product")
                         .WithMany("Inventories")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InventoryManagmentSystem.Shared.Model.Warehouse", "Warehouse")
+                    b.HasOne("InventoryManagmentSystem.Features.WarehouseManagement.Models.Warehouse", "Warehouse")
                         .WithMany()
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -535,9 +531,9 @@ namespace InventoryManagmentSystem.Migrations
                     b.Navigation("Warehouse");
                 });
 
-            modelBuilder.Entity("InventoryManagmentSystem.Shared.Model.Product", b =>
+            modelBuilder.Entity("InventoryManagmentSystem.Features.ProductManagement.Models.Product", b =>
                 {
-                    b.HasOne("InventoryManagmentSystem.Shared.Model.Category", "Category")
+                    b.HasOne("InventoryManagmentSystem.Features.CategoryManagement.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -546,23 +542,23 @@ namespace InventoryManagmentSystem.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("InventoryManagmentSystem.Shared.Model.Transaction", b =>
+            modelBuilder.Entity("InventoryManagmentSystem.Features.ReportingManagement.Models.TransactionEntity", b =>
                 {
-                    b.HasOne("InventoryManagmentSystem.Shared.Model.Warehouse", "FromWarehouse")
+                    b.HasOne("InventoryManagmentSystem.Features.WarehouseManagement.Models.Warehouse", "FromWarehouse")
                         .WithMany()
                         .HasForeignKey("FromWarehouseId");
 
-                    b.HasOne("InventoryManagmentSystem.Shared.Model.Product", "Product")
+                    b.HasOne("InventoryManagmentSystem.Features.ProductManagement.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InventoryManagmentSystem.Shared.Model.Warehouse", "ToWarehouse")
+                    b.HasOne("InventoryManagmentSystem.Features.WarehouseManagement.Models.Warehouse", "ToWarehouse")
                         .WithMany()
                         .HasForeignKey("ToWarehouseId");
 
-                    b.HasOne("InventoryManagmentSystem.Shared.Model.ApplicationUser", "User")
+                    b.HasOne("InventoryManagmentSystem.Features.AccountManagement.Models.ApplicationUser", "User")
                         .WithMany("Transactions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -579,7 +575,7 @@ namespace InventoryManagmentSystem.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("InventoryManagmentSystem.Shared.Model.ApplicationRole", null)
+                    b.HasOne("InventoryManagmentSystem.Features.AccountManagement.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -588,7 +584,7 @@ namespace InventoryManagmentSystem.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("InventoryManagmentSystem.Shared.Model.ApplicationUser", null)
+                    b.HasOne("InventoryManagmentSystem.Features.AccountManagement.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -597,7 +593,7 @@ namespace InventoryManagmentSystem.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("InventoryManagmentSystem.Shared.Model.ApplicationUser", null)
+                    b.HasOne("InventoryManagmentSystem.Features.AccountManagement.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -606,13 +602,13 @@ namespace InventoryManagmentSystem.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("InventoryManagmentSystem.Shared.Model.ApplicationRole", null)
+                    b.HasOne("InventoryManagmentSystem.Features.AccountManagement.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InventoryManagmentSystem.Shared.Model.ApplicationUser", null)
+                    b.HasOne("InventoryManagmentSystem.Features.AccountManagement.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -621,24 +617,24 @@ namespace InventoryManagmentSystem.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("InventoryManagmentSystem.Shared.Model.ApplicationUser", null)
+                    b.HasOne("InventoryManagmentSystem.Features.AccountManagement.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("InventoryManagmentSystem.Shared.Model.ApplicationUser", b =>
+            modelBuilder.Entity("InventoryManagmentSystem.Features.AccountManagement.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Transactions");
                 });
 
-            modelBuilder.Entity("InventoryManagmentSystem.Shared.Model.Category", b =>
+            modelBuilder.Entity("InventoryManagmentSystem.Features.CategoryManagement.Models.Category", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("InventoryManagmentSystem.Shared.Model.Product", b =>
+            modelBuilder.Entity("InventoryManagmentSystem.Features.ProductManagement.Models.Product", b =>
                 {
                     b.Navigation("Inventories");
                 });

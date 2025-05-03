@@ -1,0 +1,44 @@
+using System.Threading.Tasks;
+using InventoryManagmentSystem.Features.ReportingManagement.DTOs;
+using InventoryManagmentSystem.Features.ReportingManagement.Quaries.TransactionHistory;
+using InventoryManagmentSystem.Shared.APIResult;
+using InventoryManagmentSystem.Shared.Utilities;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace InventoryManagmentSystem.Features.ReportingManagement.TransactionHistory;
+
+[ApiController]
+[Route("[controller]")]
+[Authorize(Roles="Admin")]
+public class TransactionHistoryController : ControllerBase
+{
+    private readonly IMediator mediator;
+
+    public TransactionHistoryController(IMediator mediator)
+    {
+        this.mediator = mediator;
+    }
+
+    [HttpGet("GetTransactionHistory")]
+    public async Task<ActionResult> TransactionHistory([FromQuery] TransactionHistoryDTO transactionHistoryDTO)
+    {
+        TransactionHistoryQuaryRequest transactionHistoryRequest = new()
+        {
+            TransactionType = transactionHistoryDTO.TransactionType,
+            FromDate = transactionHistoryDTO.FromDate,
+            ToDate = transactionHistoryDTO.ToDate,
+            ProductCategory = transactionHistoryDTO.ProductCategory,
+            ProductId = transactionHistoryDTO.ProductId,
+            Page = transactionHistoryDTO.Page,
+            PageSize = transactionHistoryDTO.PageSize
+        };
+        var result = await mediator.Send(transactionHistoryRequest);
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+        return BadRequest(result);
+    }
+}

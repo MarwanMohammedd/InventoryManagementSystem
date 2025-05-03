@@ -1,5 +1,4 @@
-
-using InventoryManagmentSystem.Shared.UnitOfWork;
+using InventoryManagmentSystem.Shared.UnitOfWorks;
 
 namespace InventoryManagmentSystem.Shared.Registeration;
 
@@ -8,7 +7,7 @@ public class TransactionProcessMiddleware : IMiddleware
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<TransactionProcessMiddleware> logger;
 
-    public TransactionProcessMiddleware(IUnitOfWork unitOfWork, ILogger<TransactionProcessMiddleware> logger)
+    public TransactionProcessMiddleware( IUnitOfWork unitOfWork ,  ILogger<TransactionProcessMiddleware> logger)
     {
         this.unitOfWork = unitOfWork;
         this.logger = logger;
@@ -17,13 +16,13 @@ public class TransactionProcessMiddleware : IMiddleware
     {
         try
         {
-            await unitOfWork.StartTransactionAsync();
+            await unitOfWork.BeginTransactionAsync();
             await next(context);
             await unitOfWork.CommitAsync();
         }
         catch (Exception ex)
         {
-            await unitOfWork.RollBackAsync();
+            await unitOfWork.RollbackAsync();
             logger.LogError(ex.Message);
         }
     }
